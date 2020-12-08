@@ -6,8 +6,9 @@ mongoose.connect()
 const {MONGOURI} = require('./keys')
 require('./models/user')
 
-app.use(require('./routes/auth'))
 app.use(express.json())
+app.use(require('./routes/auth'))
+
 mongoose.model("User")
 
 
