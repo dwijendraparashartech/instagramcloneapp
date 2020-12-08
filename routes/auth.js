@@ -13,6 +13,13 @@ router.post('/signup',(req,res)=>{
   if(!email || !password || !name){
       return res.status(422).json({error:"please add all the fields"})
   }
+
+  router.post('/signin',(req,res)=>{
+      const{email,password}=req.body
+      if(!email || !password){
+          return res.status(422).json({error:"please add email or password"})
+      }
+  })
 //   res.json({message:"successfully posted"})
 User.findOne({email:email})
 .then((savedUser)=>{
