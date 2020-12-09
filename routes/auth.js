@@ -14,12 +14,7 @@ router.post('/signup',(req,res)=>{
       return res.status(422).json({error:"please add all the fields"})
   }
 
-  router.post('/signin',(req,res)=>{
-      const{email,password}=req.body
-      if(!email || !password){
-          return res.status(422).json({error:"please add email or password"})
-      }
-  })
+
 //   res.json({message:"successfully posted"})
 User.findOne({email:email})
 .then((savedUser)=>{
@@ -46,6 +41,30 @@ User.findOne({email:email})
 .catch(err=>{
     console.log(err)
 })
+})
+router.post('/signin',(req,res)=>{
+    const{email,password}=req.body
+    if(!email || !password){
+        return res.status(422).json({error:"please add email or password"})
+    }
+    User.findOne({email:email})
+    .then(savedUser=>{
+        if(!savedUser){
+            return res.status(422).json({error:"Invalid Email or Password"})
+        }
+        bcrypt.compare(password,savedUser.password)
+        .then(doMatch=>{
+            if(doMatch){
+                res.json({message:"successfully signed in"})
+            }
+            else{
+                return res.status(422).json({error:"Invalid Email or Password"})
+            }
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    })
 })
 
 module.exports = router
