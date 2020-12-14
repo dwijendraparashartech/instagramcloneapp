@@ -18,9 +18,7 @@ router.post('/signup',(req,res)=>{
   if(!email || !password || !name){
       return res.status(422).json({error:"please add all the fields"})
   }
-
-
-//   res.json({message:"successfully posted"})
+  res.json({message:"saved successfully"})
 User.findOne({email:email})
 .then((savedUser)=>{
     if(savedUser){
@@ -52,6 +50,7 @@ router.post('/signin',(req,res)=>{
     if(!email || !password){
         return res.status(422).json({error:"please add email or password"})
     }
+    console.log(email)
     User.findOne({email:email})
     .then(savedUser=>{
         if(!savedUser){
@@ -62,8 +61,9 @@ router.post('/signin',(req,res)=>{
             if(doMatch){
                 // res.json({message:"successfully signed in"})
                 const token = jwt.sign({_id:savedUser._id},JWT_SECRET)
-                const{id,name,email} = savedUser
-                res.json({token,user:{_id,name,email}})
+                const{_id,name,email} = savedUser
+                console.log({token,user:{_id,name,email}})
+                res.json({token,user:{_id,name,email}, message:"successfully signed in"})
             }
             else{
                 return res.status(422).json({error:"Invalid Email or Password"})
@@ -76,3 +76,4 @@ router.post('/signin',(req,res)=>{
 })
 
 module.exports = router
+
